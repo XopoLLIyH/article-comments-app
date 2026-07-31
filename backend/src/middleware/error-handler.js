@@ -5,7 +5,8 @@ function notFoundHandler(req, _res, next) {
 }
 
 function errorHandler(error, _req, res, _next) {
-  const status = error.status || 500;
+  const sequelizeClientError = ['SequelizeValidationError', 'SequelizeUniqueConstraintError'].includes(error.name);
+  const status = error.status || (sequelizeClientError ? 400 : 500);
   const payload = {
     error: error.name || 'Error',
     message: status === 500 ? 'Internal server error' : error.message,
@@ -20,4 +21,3 @@ function errorHandler(error, _req, res, _next) {
 }
 
 module.exports = { notFoundHandler, errorHandler };
-

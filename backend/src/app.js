@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const config = require('./config/env');
 const { notFoundHandler, errorHandler } = require('./middleware/error-handler');
+const articleRoutes = require('./routes/article-routes');
+const analyticsRoutes = require('./routes/analytics-routes');
 
 function createApp() {
   const app = express();
@@ -11,6 +13,8 @@ function createApp() {
   app.use(express.json({ limit: '1mb' }));
 
   app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+  app.use(articleRoutes);
+  app.use(analyticsRoutes);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
@@ -19,4 +23,3 @@ function createApp() {
 }
 
 module.exports = createApp;
-
